@@ -1,0 +1,24 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Flask uploads / temp predict outputs
+static/upload/*
+!static/upload/.gitkeep
+
+static/predict/*
+!static/predict/.gitkeep

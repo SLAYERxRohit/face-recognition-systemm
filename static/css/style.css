@@ -1,0 +1,527 @@
+/* Viesta: The Face Recognition App - Custom Stylesheet */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg-dark: #0a0b10;
+    --bg-card: rgba(20, 22, 35, 0.6);
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(124, 58, 237, 0.3);
+    
+    /* Branding Colors */
+    --primary: #8b5cf6;       /* Violet */
+    --primary-glow: rgba(139, 92, 246, 0.4);
+    --secondary: #06b6d4;     /* Cyan */
+    --accent: #d946ef;        /* Fuchsia */
+    
+    /* Classification Colors */
+    --male-color: #0ea5e9;    /* Light Blue */
+    --male-glow: rgba(14, 165, 233, 0.2);
+    --female-color: #ec4899;  /* Pink */
+    --female-glow: rgba(236, 72, 153, 0.2);
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+/* Reset & Base Styles */
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Background Ambient Glows */
+body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+body::before {
+    background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+    top: -200px;
+    left: -100px;
+}
+
+body::after {
+    background: radial-gradient(circle, var(--secondary) 0%, transparent 70%);
+    bottom: -100px;
+    right: -100px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #ffffff 30%, var(--primary) 70%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+.gradient-brand {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+
+p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+/* Floating Glass Navbar */
+.navbar-viesta {
+    background: rgba(10, 11, 16, 0.7) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    transition: all 0.3s ease;
+}
+
+.navbar-viesta .navbar-brand {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: var(--text-primary) !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navbar-viesta .navbar-brand img {
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+    transition: transform 0.3s ease;
+}
+
+.navbar-viesta .navbar-brand:hover img {
+    transform: rotate(10deg) scale(1.05);
+}
+
+.navbar-viesta .nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.navbar-viesta .nav-link:hover, 
+.navbar-viesta .nav-link.active {
+    color: var(--text-primary) !important;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Glassmorphism Containers */
+.glass-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--border-glow);
+    box-shadow: 0 15px 35px -5px rgba(139, 92, 246, 0.1);
+}
+
+/* Custom Buttons */
+.btn-viesta-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    padding: 0.8rem 1.8rem;
+    box-shadow: 0 4px 15px var(--primary-glow);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-viesta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+    color: #ffffff;
+}
+
+.btn-viesta-primary:active {
+    transform: translateY(1px);
+}
+
+.btn-viesta-outline {
+    background: transparent;
+    color: var(--text-primary);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    padding: 0.8rem 1.8rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-viesta-outline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--text-primary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+/* Feature Cards on Landing Page */
+.feature-card {
+    height: 100%;
+}
+
+.feature-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(139, 92, 246, 0.1);
+    border: 1px solid var(--border-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    color: var(--primary);
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover .feature-icon-wrapper {
+    background: var(--primary);
+    color: #ffffff;
+    box-shadow: 0 0 15px var(--primary-glow);
+    transform: scale(1.05);
+}
+
+/* Drag-and-drop Image Uploader */
+.upload-container {
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.upload-container.dragover {
+    border-color: var(--primary);
+    background: rgba(139, 92, 246, 0.05);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.upload-container:hover .upload-icon,
+.upload-container.dragover .upload-icon {
+    color: var(--primary);
+    transform: translateY(-5px);
+}
+
+.file-preview-wrapper {
+    display: none;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.file-preview {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Custom Table Design */
+.viesta-table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.viesta-table {
+    width: 100%;
+    margin-bottom: 0;
+    color: var(--text-primary);
+    border-collapse: collapse;
+}
+
+.viesta-table th {
+    background: rgba(255, 255, 255, 0.03);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.viesta-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+    background: rgba(20, 22, 35, 0.2);
+}
+
+.viesta-table tr:last-child td {
+    border-bottom: none;
+}
+
+.viesta-table tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.img-thumbnail-viesta {
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: #000;
+    padding: 2px;
+}
+
+/* Prediction Badges */
+.badge-gender {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: capitalize;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.badge-male {
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--male-color);
+    border: 1px solid rgba(14, 165, 233, 0.3);
+    box-shadow: 0 0 10px rgba(14, 165, 233, 0.1);
+}
+
+.badge-female {
+    background: rgba(236, 72, 153, 0.15);
+    color: var(--female-color);
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.1);
+}
+
+/* Score Progress Bar */
+.progress-viesta {
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.progress-bar-viesta {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.6s ease;
+}
+
+.progress-bar-male {
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+    box-shadow: 0 0 8px rgba(14, 165, 233, 0.5);
+}
+
+.progress-bar-female {
+    background: linear-gradient(90deg, #ec4899, #f472b6);
+    box-shadow: 0 0 8px rgba(236, 72, 153, 0.5);
+}
+
+/* Loading/Processing Overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 11, 16, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+#loading-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.scanner-box {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.1);
+}
+
+.scanner-box::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--secondary), var(--primary), var(--secondary), transparent);
+    box-shadow: 0 0 15px var(--secondary), 0 0 30px var(--primary);
+    top: 0;
+    animation: scan 2s linear infinite;
+}
+
+.scanner-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.15);
+    animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+.loading-steps {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    max-width: 350px;
+}
+
+.loading-step {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin: 0.8rem 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0.4;
+}
+
+.loading-step.active {
+    color: var(--text-primary);
+    opacity: 1;
+    font-weight: 500;
+}
+
+.loading-step.active::before {
+    content: '●';
+    color: var(--secondary);
+    animation: blink 1s infinite alternate;
+}
+
+.loading-step.completed {
+    color: var(--primary);
+    opacity: 0.8;
+}
+
+.loading-step.completed::before {
+    content: '✓';
+    font-weight: bold;
+}
+
+/* Animations */
+@keyframes scan {
+    0% { top: 0%; }
+    50% { top: 100%; }
+    100% { top: 0%; }
+}
+
+@keyframes pulse {
+    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.2; }
+    100% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.4; }
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; }
+    100% { opacity: 1; }
+}
+
+/* Gradient Borders for Prediction Image */
+.prediction-image-container {
+    position: relative;
+    border-radius: 16px;
+    padding: 6px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    display: inline-block;
+    max-width: 100%;
+}
+
+.prediction-image-container img {
+    border-radius: 12px;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* Footer style */
+.viesta-footer {
+    border-top: 1px solid var(--border-color);
+    padding: 2rem 0;
+    color: var(--text-secondary);
+    margin-top: 5rem;
+    font-size: 0.9rem;
+}
+
+.viesta-footer a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.viesta-footer a:hover {
+    color: var(--primary);
+}

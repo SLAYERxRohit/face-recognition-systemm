@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block bodyblock %}
+<!-- Loading Screen Overlay -->
+<div id="loading-overlay">
+    <div class="scanner-box">
+        <i class="bi bi-person-bounding-box scanner-icon"></i>
+    </div>
+    <h3 class="gradient-text mb-3">Viesta Pipeline Active</h3>
+    <p class="text-secondary small mb-4">Processing image with computer vision algorithms...</p>
+    <ul class="loading-steps">
+        <li class="loading-step">Locating facial regions (Haar Cascade)...</li>
+        <li class="loading-step">Normalizing pixels & cropping ROI...</li>
+        <li class="loading-step">Reconstructing Eigenfaces (PCA)...</li>
+        <li class="loading-step">Running classification boundaries (SVM)...</li>
+    </ul>
+</div>
+
+<div class="container my-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h2 class="display-5 fw-bold">
+            Face <span class="gradient-brand">Analyzer</span>
+        </h2>
+        <p class="text-secondary col-lg-6 mx-auto">
+            Upload a portrait photo. Our system will crop any detected faces, compress them to their Eigenface counterparts, and perform classifications.
+        </p>
+    </div>
+
+    <!-- Conditional Layout based on fileupload -->
+    <div class="row g-5">
+        <!-- Upload Form Column -->
+        <div class="{% if fileupload %}col-lg-5{% else %}col-lg-8 offset-lg-2{% endif %}">
+            <div class="glass-card">
+                <h4 class="mb-4 fw-bold"><i class="bi bi-upload me-2 text-primary"></i>Image Upload</h4>
+                
+                <form id="predict-form" action="#" method="POST" enctype="multipart/form-data">
+                    <!-- Dropdowns Config Panel -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="analysis_mode" class="form-label text-secondary small">Analysis Mode</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="analysis_mode" name="analysis_mode" style="border-radius: 10px; padding: 0.6rem 1rem;">
+                                <option value="both" {% if analysis_mode == 'both' %}selected{% endif %}>Gender & Age (Both)</option>
+                                <option value="gender" {% if analysis_mode == 'gender' %}selected{% endif %}>Gender Only</option>
+                                <option value="age" {% if analysis_mode == 'age' %}selected{% endif %}>Age Only</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="filter_gender" class="form-label text-secondary small">Filter Detections</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="filter_gender" name="filter_gender" style="border-radius: 10px; padding: 0.6rem 1rem;">
+                                <option value="all" {% if filter_gender == 'all' %}selected{% endif %}>All Detections</option>
+                                <option value="male" {% if filter_gender == 'male' %}selected{% endif %}>Male Only</option>
+                                <option value="female" {% if filter_gender == 'female' %}selected{% endif %}>Female Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Drag and Drop Container -->
+                    <div class="upload-container mb-4" id="upload-container">
+                        <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                        <p class="mb-1" id="upload-prompt">
+                            <strong>Drag & drop an image</strong> here or click to browse
+                        </p>
+                        <p class="text-muted small mb-0">Supports JPG, JPEG, PNG</p>
+                        
+                        <!-- Hidden File Input -->
+                        <input type="file" id="image-file-input" name="image_name" accept=".jpg, .jpeg, .png" required style="display: none;">
+                    </div>
+
+                    <!-- Client-Side Image Preview -->
+                    <div class="file-preview-wrapper mb-4" id="preview-wrapper">
+                        <p class="text-secondary small mb-2 text-start">Image Selected:</p>
+                        <img src="" id="file-preview" class="file-preview" alt="Preview">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-viesta-primary w-100 py-3">
+                        <i class="bi bi-shield-check me-2"></i>Analyze Face
+                    </button>
+                </form>
+            </div>
+
+            <!-- Predicted Image Box (if uploaded) -->
+            {% if fileupload %}
+            <div class="glass-card mt-4 text-center">
+                <h4 class="mb-4 text-start fw-bold"><i class="bi bi-image me-2 text-primary"></i>Analyzed Output</h4>
+                <div class="prediction-image-container mb-2">
+                    <img src="/static/predict/prediction_image.jpg?t={{ timestamp }}" class="img-fluid" alt="Predicted Faces Output">
+                </div>
+                <div class="text-secondary small mt-2">
+                    <i class="bi bi-info-circle me-1"></i>Found and bounding-boxed {{ report|length }} face(s)
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Prediction Report Column -->
+        {% if fileupload %}
+        <div class="col-lg-7">
+            <div class="glass-card">
+                <h4 class="mb-4 fw-bold"><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Pipeline Breakdown</h4>
+                
+                {% if report %}
+                <div class="viesta-table-container">
+                    <table class="viesta-table">
+                        <thead>
+                            <tr>
+                                <th>Detected ROI</th>
+                                <th>Eigenface</th>
+                                {% if analysis_mode in ['gender', 'both'] %}
+                                <th>Gender</th>
+                                <th>Gender Conf.</th>
+                                {% endif %}
+                                {% if analysis_mode in ['age', 'both'] %}
+                                <th>Age Group</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for element in report %}
+                            <tr>
+                                <td>
+                                    <img src="/static/predict/{{ element[0] }}?t={{ timestamp }}" class="img-thumbnail-viesta" width="70" height="70" alt="Cropped face">
+                                </td>
+                                <td>
+                                    <img src="/static/predict/{{ element[1] }}?t={{ timestamp }}" class="img-thumbnail-viesta" width="70" height="70" alt="PCA Eigenface">
+                                </td>
+                                {% if analysis_mode in ['gender', 'both'] %}
+                                <td>
+                                    {% if element[2] == 'male' %}
+                                    <span class="badge-gender badge-male">
+                                        <i class="bi bi-gender-male"></i> Male
+                                    </span>
+                                    {% elif element[2] == 'female' %}
+                                    <span class="badge-gender badge-female">
+                                        <i class="bi bi-gender-female"></i> Female
+                                    </span>
+                                    {% else %}
+                                    <span class="badge-gender" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border: 1px solid var(--border-color);">
+                                        Unknown
+                                    </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if element[2] != 'unknown' %}
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress-viesta d-none d-sm-inline-block">
+                                            <div class="progress-bar-viesta {% if element[2] == 'male' %}progress-bar-male{% else %}progress-bar-female{% endif %}" 
+                                                 style="width: {{ element[3] }}%;"></div>
+                                        </div>
+                                        <span class="fw-bold">{{ element[3] }}%</span>
+                                    </div>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                                {% if analysis_mode in ['age', 'both'] %}
+                                <td>
+                                    {% if element[4] != 'unknown' %}
+                                    <span class="badge-gender" style="background: rgba(139, 92, 246, 0.15); color: var(--primary); border: 1px solid rgba(139, 92, 246, 0.3);">
+                                        <i class="bi bi-calendar-event me-1"></i> {{ element[4] }} yrs
+                                    </span>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-exclamation-triangle fs-1 text-warning mb-3"></i>
+                    <h5>No Faces Detected</h5>
+                    <p class="text-secondary mb-0">Haar Cascades was unable to identify facial structures in this image. Try using a clear, front-facing portrait photo.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

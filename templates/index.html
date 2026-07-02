@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block bodyblock %}
+<div class="container my-5">
+    <!-- Hero Section -->
+    <div class="row align-items-center justify-content-center text-center py-5">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-extrabold mb-3">
+                Meet <span class="gradient-brand">Viesta</span>
+            </h1>
+            <h2 class="h3 text-muted fw-normal mb-4">
+                The Next-Gen Face & Age Recognition App
+            </h2>
+            <p class="lead text-secondary mb-5 px-md-5">
+                Experience high-performance facial detection, age estimation, and gender classification powered by an end-to-end Machine Learning and Deep Learning pipeline. Viesta locates faces, extracts characteristics, and predicts attributes in real-time.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+                <a href="/app/gender/" class="btn btn-viesta-primary btn-lg">
+                    <i class="bi bi-cpu me-2"></i>Launch Analyzer
+                </a>
+                <a href="/app/" class="btn btn-viesta-outline btn-lg">
+                    <i class="bi bi-info-circle me-2"></i>How It Works
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row g-4 mt-5">
+        <div class="col-lg-3 col-md-6">
+            <div class="glass-card feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="bi bi-camera"></i>
+                </div>
+                <h3>Haar Cascades</h3>
+                <p class="mb-0 small">
+                    Locates and crops faces from raw inputs in real-time. Leverages OpenCV's pre-trained Haar Cascades to find human eyes and facial patterns instantly.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="glass-card feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="bi bi-grid-3x3-gap"></i>
+                </div>
+                <h3>PCA & Eigenfaces</h3>
+                <p class="mb-0 small">
+                    Reduces dimensionality and extracts vital features by projecting facial pixels into an eigenspace, mapping raw photos to visual "Eigenfaces".
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="glass-card feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="bi bi-gender-ambiguous"></i>
+                </div>
+                <h3>Gender SVM</h3>
+                <p class="mb-0 small">
+                    Classifies gender features using Support Vector Machine (SVM) algorithms. Computes hyperplane projections to output gender predictions with probability scores.
+                </p>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="glass-card feature-card">
+                <div class="feature-icon-wrapper">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <h3>Age estimation</h3>
+                <p class="mb-0 small">
+                    Predicts age brackets using a deep Caffe convolutional neural network (CNN) model, mapping facial dimensions to 8 separate age groupings.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
