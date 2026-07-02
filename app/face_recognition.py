@@ -2,12 +2,16 @@ import numpy as np
 import sklearn
 import pickle
 import cv2
+import os
 
+# Get directory path of the current file and determine absolute base directory
+_DIR_PATH = os.path.dirname(os.path.abspath(__file__))
+_BASE_DIR = os.path.dirname(_DIR_PATH)
 
 # Load all models
-haar = cv2.CascadeClassifier('./model/haarcascade_frontalface_default.xml') # cascade classifier
-model_svm =  pickle.load(open('./model/model_svm.pickle',mode='rb')) # machine learning model (SVM)
-pca_models = pickle.load(open('./model/pca_dict.pickle',mode='rb')) # pca dictionary
+haar = cv2.CascadeClassifier(os.path.join(_BASE_DIR, 'model', 'haarcascade_frontalface_default.xml')) # cascade classifier
+model_svm =  pickle.load(open(os.path.join(_BASE_DIR, 'model', 'model_svm.pickle'),mode='rb')) # machine learning model (SVM)
+pca_models = pickle.load(open(os.path.join(_BASE_DIR, 'model', 'pca_dict.pickle'),mode='rb')) # pca dictionary
 model_pca = pca_models['pca'] # PCA model
 mean_face_arr = pca_models['mean_face'] # Mean Face
 
@@ -16,7 +20,10 @@ if not hasattr(model_pca, 'power_iteration_normalizer'):
     model_pca.power_iteration_normalizer = 'auto'
 
 # Load Caffe Age Model
-age_net = cv2.dnn.readNetFromCaffe('./model/age_deploy.prototxt', './model/age_net.caffemodel')
+age_net = cv2.dnn.readNetFromCaffe(
+    os.path.join(_BASE_DIR, 'model', 'age_deploy.prototxt'),
+    os.path.join(_BASE_DIR, 'model', 'age_net.caffemodel')
+)
 age_list = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
 MODEL_MEAN_VALUES = (78.4263377603, 87.7689143744, 114.895847746)
 

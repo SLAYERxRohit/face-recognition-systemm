@@ -4,9 +4,28 @@ import time
 from app.face_recognition import faceRecognitionPipeline
 from flask import render_template, request
 import matplotlib.image as matimg
+import tempfile
 
 
+# Dynamic detection of read-only filesystems (like Vercel)
 UPLOAD_FOLDER = 'static/upload'
+PREDICT_FOLDER = './static/predict'
+IS_READ_ONLY = False
+
+try:
+    # Test writing to static/upload
+    test_file_path = os.path.join(UPLOAD_FOLDER, '.write_test')
+    with open(test_file_path, 'w') as test_file:
+        test_file.write('test')
+    os.remove(test_file_path)
+except Exception:
+    IS_READ_ONLY = True
+    # Fallback to system's temp directory
+    UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'face_app_upload')
+    PREDICT_FOLDER = os.path.join(tempfile.gettempdir(), 'face_app_predict')
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(PREDICT_FOLDER, exist_ok=True)
+
 
 def index():
     return render_template('index.html')
@@ -30,7 +49,7 @@ def genderapp():
         # get predictions
         pred_image, predictions = faceRecognitionPipeline(path, analysis_mode=analysis_mode, filter_gender=filter_gender)
         pred_filename = 'prediction_image.jpg'
-        cv2.imwrite(f'./static/predict/{pred_filename}',pred_image)
+        cv2.imwrite(os.path.join(PREDICT_FOLDER, pred_filename),pred_image)
         
         # generate report
         report = []
@@ -45,8 +64,8 @@ def genderapp():
             # save grayscale and eigne in predict folder
             gray_image_name = f'roi_{i}.jpg'
             eig_image_name = f'eigen_{i}.jpg'
-            matimg.imsave(f'./static/predict/{gray_image_name}',gray_image,cmap='gray')
-            matimg.imsave(f'./static/predict/{eig_image_name}',eigen_image,cmap='gray')
+            matimg.imsave(os.path.join(PREDICT_FOLDER, gray_image_name),gray_image,cmap='gray')
+            matimg.imsave(os.path.join(PREDICT_FOLDER, eig_image_name),eigen_image,cmap='gray')
             
             # save report 
             report.append([gray_image_name,
